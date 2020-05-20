@@ -1,2 +1,7 @@
-# statistical_inference_course_project
-Final Course Project for the John Hopkins Statistical Inference Class
+# Final Course Project for the John Hopkins Statistical Inference Class
+
+## Part 1: Exponential Distribution Simulation
+- [ ] Report
+
+## Part 2: ToothGrowth Inferential Data Analysis
+- [ ] Report
