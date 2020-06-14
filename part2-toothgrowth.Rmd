@@ -1,0 +1,79 @@
+---
+title: "Part2 ToothGrowth"
+author: "Shayaan Ahmed Farooqi"
+date: "5/20/2020"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r results=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+data("ToothGrowth")
+ToothGrowth <- tbl_df(ToothGrowth)
+```
+
+## Exploratory Data Analysis:
+```{r EDA}
+str(ToothGrowth)
+
+ggplot(data=ToothGrowth) + 
+    aes(x = dose, y = len) + 
+    geom_point() + 
+    facet_grid(cols=vars(supp)) +
+    geom_smooth(method='lm')
+
+
+```
+
+## Data Summary:
+
+The ToothGrowth dataset studies how vitamin C supplements affect the tooth growth of Guinea Pigs. It has 3 variables: **len**, **supp** and **dose**. len represents the length of teeth of Guinea Pigs, It is numeric. supp represents the type of supplement given, it is either Orange Juice represented as "OJ" or it is ascorbic acid coded as "VC". The dose represents the amount of supplement given in milligrams/day.
+
+Based on our initial exploratory graphs we can see a clear positive relation in dosage and the length of teeth. More dosage results in longer teeth and ascorbic acid seems to have a bigger impact on the length of teeth.
+
+
+
+## Tests:
+### Test 1
+**Alternate Hypothesis 1**: Supplement VC has higher mean length than supplement OJ.  
+**Null Hypothesis** : Both supplements have the same mean lengths.
+
+Assuming that both groups have the same variance and the population is normally distributed.
+
+```{r}
+vc <- ToothGrowth %>% 
+    filter(supp=="VC") 
+
+oj <- ToothGrowth %>% 
+    filter(supp=="OJ") 
+
+t.test(x=vc$len, y=oj$len, var.equal = TRUE)
+```
+Based on this result we fail to reject the Null Hypothesis since our confidence interval includes 0 and we have a P-value of 6%.
+
+
+
+### Test 2
+**Alternate Hypothesis 2**: dose 2 has higher mean length than dose 0.5.  
+**Null Hypothesis** : Both dosages have the same mean lengths.
+
+Assuming that both groups have the same variance and the population is normally distributed.
+
+```{r}
+d2 <- ToothGrowth %>% 
+    filter(dose==2) 
+
+d05 <- ToothGrowth %>% 
+    filter(dose==0.5) 
+
+t.test(x=d2$len, y=d05$len, var.equal = TRUE)
+```
+
+Based on these results we can comfortably reject the Null hypothesis since our P-Value is extremely small and our confidence interval also does not include 0.
+
+Both conclusions are based on the assumptions that all Guinea pigs were chosen independently and randomly from a normally distributed population and we do not have a bad sampling situation where for example naturally fast growing guinea pigs were given high dosages which would confound our results. There is also a small chance that this particular sample was a rare coincidence and just happened to result in this conclusion as shown by the P-value.
